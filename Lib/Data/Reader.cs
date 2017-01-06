@@ -73,49 +73,26 @@ namespace Game.Data
         }
 
 
-        public static Team LoadPlayerTeam(string PlayerName, int[] place)
+        public static Team LoadPlayerTeam(string username, int[] place, OleDbConnection conn)
         {
             Team t = new Team(false);
 
-            using (OleDbConnection conn = new OleDbConnection(connectionString))
+            for (int i = 0; i < place.Length; i++)
             {
+                OleDbCommand command = new OleDbCommand("SELECT * FROM " + username + " WHERE place=" + place[i] + ";", conn);
+                OleDbDataReader r = null;
 
-                conn.Open();
+                r = command.ExecuteReader();
 
-                for (int i = 0; i < place.Length; i++)
-                {
-                    OleDbCommand command = new OleDbCommand("SELECT * FROM "+PlayerName+" WHERE place=" + place[i]+";", conn);
-                    OleDbDataReader r = null;
+                r.Read();
 
-                    while (true)
-                    {
-                        try
-                        {
-                            r = command.ExecuteReader();
+                Hero hero = GetHero((int)r[1]);
+                hero.stats.SetLevel((int)r["lvl"], (int)r["exp"]);
 
-                            r.Read();
-
-                            Hero hero = Reader.GetHero((int)r[1]);
-                            hero.stats.SetLevel((int)r["lvl"], (int)r["exp"]);
-
-                            t.AddHero(hero);
-                            break;
-                        }
-                        catch (OleDbException e)
-                        {
-                            Console.Write("This Name doesn't exist. Enter Correct Name ");
-                            PlayerName = Console.ReadLine();
-                            r.Close();
-                        }
-                        catch (NullReferenceException e)   
-                        {
-                            Console.Write(e.StackTrace);
-                        }
-                    }
-                }
+                t.AddHero(hero);
             }
 
-                return t;
+            return t;
         }
 
         public static Team LoadMonsterTeam(int dungeonID)
@@ -160,54 +137,84 @@ namespace Game.Data
             }
         }
 
-        public static string CreatingNewPlayer()
+        public static Team Connecting()
         {
-            string PlayerName;
+            string username;
+            string password;
             using (OleDbConnection conn = new OleDbConnection(connectionString))
             {
                 conn.Open();
-
-                List<string> Names = new List<string>();
-
-                var data = conn.GetSchema();
-                System.Data.DataRowCollection rc = data.Rows;
-
-                Console.WriteLine("Enter you name ");
-
-                PlayerName = Console.ReadLine();
-
                 while (true)
                 {
+                    Console.Write("Enter username : ");
+                    username = Console.ReadLine();
+                    OleDbCommand getPassword = null;
                     try
                     {
-                        CreateNewPlayer(PlayerName);
-                        break;
+                        getPassword = new OleDbCommand(String.Format("SELECT * FROM users WHERE username='{0}'",username), conn); //пытаемся получить пароль юзера
+
+                        OleDbDataReader dr = getPassword.ExecuteReader();
+                        dr.Read();
+
+                        Console.Write("Enter password :");
+                        password = Console.ReadLine();
+
+                        if (password == dr["userpassword"].ToString())
+                        {
+                            return LoadPlayerTeam(username,new int[] { 1, 2, 3, 4, 5 }, conn);
+                        }
                     }
-                    catch (Exception e)
+                    catch (OleDbException e)
                     {
-                        Console.WriteLine("This name is already exist");
-
-                        Console.WriteLine("Enter you name ");
-
-                        PlayerName = Console.ReadLine();
+                        Console.Write("this username doesn't exist. do you want to create new user? y/n  ");
+                        if (Console.ReadLine() == "y")
+                        {
+                            CreateNewPlayer(username, conn);
+                        }
                     }
+                    
                 }
             }
-            return PlayerName;    
         }
 
-        public static void CreateNewPlayer(string PlayerName)
+        public static void CreateNewPlayer(String name, OleDbConnection conn)
         {
+            string password;
 
-
-            using (OleDbConnection conn = new OleDbConnection(connectionString))
+            while(true)
             {
-                conn.Open();
-
-                    OleDbCommand cmd = new OleDbCommand("select * into " + PlayerName + " from NewPlayer",conn);
-
-                    cmd.ExecuteNonQuery();
+                if (Check(name, conn))
+                {
+                    Console.Write("enter you password : ");
+                    password = Console.ReadLine();
+                    break;
+                }
+                else
+                {
+                    Console.Write("This name is already exist. Enter new name: ");
+                    name = Console.ReadLine();
+                }
             }
+
+            OleDbCommand cmd;
+            cmd = new OleDbCommand(String.Format("INSERT INTO users (username, userpassword) VALUES ('{0}', '{1}')", name, password), conn);
+            cmd.ExecuteNonQuery();
+
+            cmd = new OleDbCommand("select * into " + name + " from NewPlayer", conn);
+            cmd.ExecuteNonQuery();
+        }
+
+        public static bool Check(string name, OleDbConnection conn)
+        {
+            OleDbCommand cmd = new OleDbCommand("Select username FROM users", conn);
+
+            OleDbDataReader r = cmd.ExecuteReader();
+
+            while (r.Read())
+            {
+                if (r["username"].ToString() == name) return false;
+            }
+            return true;
         }
     }
 }

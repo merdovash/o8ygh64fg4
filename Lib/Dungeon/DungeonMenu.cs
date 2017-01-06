@@ -14,11 +14,17 @@ namespace Game.GamePlay
         Team playersTeam;
 
         string PlayerName;
+        private Team team1;
 
         public DungeonMenu(Team playersTeam, string PlayerName)
         {
             this.playersTeam = playersTeam;
             this.PlayerName = PlayerName;
+        }
+
+        public DungeonMenu(Team team1)
+        {
+            this.team1 = team1;
         }
 
         public override void ShowMenu()

@@ -58,72 +58,70 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DamageType.cs">
+    <Compile Include="Lib\DamageType.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Data\Form\ConsoleOutput.cs" />
-    <Compile Include="Data\IData.cs" />
-    <Compile Include="Data\OutPut\OutputLogger.cs" />
-    <Compile Include="Data\Reader.cs">
+    <Compile Include="Lib\Data\Form\ConsoleOutput.cs" />
+    <Compile Include="Lib\Data\IData.cs" />
+    <Compile Include="Lib\Data\OutPut\OutputLogger.cs" />
+    <Compile Include="Lib\Data\Reader.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Dungeon\Dungeon.cs">
+    <Compile Include="Lib\Dungeon\Dungeon.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Dungeon\DungeonMenu.cs">
+    <Compile Include="Lib\Dungeon\DungeonMenu.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Units\Effects\Buffs.cs" />
-    <Compile Include="Units\Effects\Effect.cs" />
-    <Compile Include="Menu.cs">
+    <Compile Include="Lib\MainClass.cs" />
+    <Compile Include="Lib\Units\Effects\Buffs.cs" />
+    <Compile Include="Lib\Units\Effects\Effect.cs" />
+    <Compile Include="Lib\Menu.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Spells\Magic\Damage\Periodic\PeriodicDamageSpell.cs">
+    <Compile Include="Lib\Spells\Magic\Damage\Periodic\PeriodicDamageSpell.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Spells\Magic\Damage\SpellDamage.cs">
+    <Compile Include="Lib\Spells\Magic\Damage\SpellDamage.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Hero.cs">
+    <Compile Include="Lib\Hero.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Logger.cs">
+    <Compile Include="Lib\Logger.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="MainClass.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Battle.cs">
+    <Compile Include="Lib\Battle.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Spells\Magic\Heal\Periodic\PriodicHealSpell.cs">
+    <Compile Include="Lib\Spells\Magic\Heal\Periodic\PriodicHealSpell.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Spells\Magic\MagicSpell.cs">
+    <Compile Include="Lib\Spells\Magic\MagicSpell.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Spells\Physical\PhysicalSpell.cs">
+    <Compile Include="Lib\Spells\Physical\PhysicalSpell.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Spells\Spell.cs">
+    <Compile Include="Lib\Spells\Spell.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Spells\Magic\Heal\SpellHeal.cs">
+    <Compile Include="Lib\Spells\Magic\Heal\SpellHeal.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Stats.cs">
+    <Compile Include="Lib\Stats.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Team.cs">
+    <Compile Include="Lib\Team.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Units\Effects\Permanent\PermanentEffect.cs" />
-    <Compile Include="Units\Effects\Teporary\DamageTempEffect.cs" />
-    <Compile Include="Units\Effects\Teporary\HealingTempEffect.cs" />
-    <Compile Include="Units\Effects\Teporary\TemporaryEffect.cs" />
+    <Compile Include="Lib\Units\Effects\Permanent\PermanentEffect.cs" />
+    <Compile Include="Lib\Units\Effects\Teporary\DamageTempEffect.cs" />
+    <Compile Include="Lib\Units\Effects\Teporary\HealingTempEffect.cs" />
+    <Compile Include="Lib\Units\Effects\Teporary\TemporaryEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

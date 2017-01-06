@@ -9,7 +9,7 @@ namespace Game.Data.OutPut
 {
     class OutputLogger
     {
-        private static string log = "{0}.txt";
+        private static string log = "C:/Games/log/{0}.txt";
         private static int n = 1;
 
         public static void NewLog()
@@ -24,9 +24,7 @@ namespace Game.Data.OutPut
             {
                 File.AppendAllText(String.Format(log, n), n);
             }
-#pragma warning disable CS0168 // Переменная "e" объявлена, но ни разу не использована.
             catch (ArgumentException e)
-#pragma warning restore CS0168 // Переменная "e" объявлена, но ни разу не использована.
             {
 
             }
