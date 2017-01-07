@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Game.Data
+namespace Game.Lib.Units
 {
-    interface IData
+    interface ITimable
     {
-        void Add(string s);
-        void Update(string[] s);
-        void Print();
+        void SetTimer(Stopwatch s);
     }
 }

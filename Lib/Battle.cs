@@ -18,24 +18,31 @@ namespace Game
 
         public Battle (Team team1, Team team2)
         {
-            teams = new Team[2];
-            teams[0] = team1;
-            teams[1] = team2;
-
-            Array.ForEach(teams, x => x.Prepare());
+            teams = new Team[] { team1, team2 };
         }
 
 
         Stopwatch timer;
-        int n = 1;
+        int n;
 
         ConsoleOutput co;
 
-        public void Start()
+        public void Prepare()
         {
             co = new ConsoleOutput();
 
             timer = new Stopwatch();
+
+            Array.ForEach(teams, x => x.Prepare());
+
+            n = 1;
+
+            Array.ForEach(teams, x => { x.SetTimer(timer); x.SetCout(co); });
+        }
+
+        public void Start()
+        {
+            
             timer.Start();
 
             PrintStatus();
@@ -47,7 +54,7 @@ namespace Game
                 {
                     for (int j = 0; j < teams[i].AliveHeroes.Count; j++)
                     {
-                        teams[i].AliveHeroes[j].UpdateStatus(teams, timer.ElapsedMilliseconds); 
+                        teams[i].AliveHeroes[j].UpdateStatus(teams); 
 
                         teams[(n + 1) % 2].UpdateStatus();
 
@@ -60,7 +67,7 @@ namespace Game
                 co.Print();
             }
 
-            ConsoleOutput.Add(timer.ElapsedMilliseconds,teams[0].isDead() ? "Right win" : "Left win");
+            co.Add(timer.ElapsedMilliseconds,teams[0].isDead() ? "Right win" : "Left win");
 
             if (!teams[0].isDead())
             {
@@ -68,11 +75,11 @@ namespace Game
                 {
                     teams[0][i].stats.AddExp(50);
                 }
-                ConsoleOutput.Add(timer.ElapsedMilliseconds, "You Win");
+                co.Add(timer.ElapsedMilliseconds, "You Win");
             }
             else
             {
-                ConsoleOutput.Add(timer.ElapsedMilliseconds,"you Lose");
+                co.Add(timer.ElapsedMilliseconds,"you Lose");
             }
         }
 
@@ -84,7 +91,7 @@ namespace Game
                 //Console.WriteLine(String.Format("{0,7} : {1,7}:{4,4} {2,19} :  {3,3}:{5,4}", teams[0][i].Name, teams[0][i].stats.CurrentHealth, teams[1][i].Name, teams[1][i].stats.CurrentHealth, teams[0][i].stats.SP, teams[1][i].stats.SP));
                 l[i]=String.Format("{0,7} : {1,7}:{4,4,4} {2,19} :  {3,3}:{5,4,4}", teams[0][i].Name, teams[0][i].stats.CurrentHealth, teams[1][i].Name, teams[1][i].stats.CurrentHealth, teams[0][i].stats.SP, teams[1][i].stats.SP);
             }
-            ConsoleOutput.Update(l);
+            co.Update(l);
         }
 
         private void Spells()

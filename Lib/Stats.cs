@@ -2,6 +2,7 @@
 using Game.Units.Effects;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -98,20 +99,29 @@ namespace Game.Units.Heroes
             }
         }
 
-        public bool AttackReady(long currentTime)
+        public bool AttackReady()
         {
-            if (currentTime - currentAttackSpeed > lastAttack)
+            if (timer.ElapsedMilliseconds - currentAttackSpeed > lastAttack)
             {
                 return true;
             }
             return false;
         }
 
-        public void Attack(long currentTime)
+        public void Attack()
         {
-            lastAttack = currentTime;
+            lastAttack = timer.ElapsedMilliseconds;
         }
 
+        public long LastAttack
+        {
+            set
+            {
+                lastAttack = value;
+            }
+        }
+
+        public Stopwatch timer;
 
         //damage part
         private int damage;
@@ -286,11 +296,11 @@ namespace Game.Units.Heroes
             buffs.Add(effect);            
         }
 
-        public void Update(long currentTime)
+        public void Update()
         {
             for (int i = 0; i < buffs.Count; i++)
             {
-                buffs[i].Update(currentTime);
+                buffs[i].Update(timer.ElapsedMilliseconds);
             }
         }
     }

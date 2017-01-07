@@ -1,8 +1,11 @@
 ﻿using Game.Data.Form;
+using Game.Lib.Units;
 using Game.Loggers;
 using Game.Units.Heroes;
 using Game.Units.Splells;
 using System.Collections.Generic;
+using System;
+using System.Diagnostics;
 
 namespace Game.Units
 {
@@ -10,7 +13,7 @@ namespace Game.Units
     {
         public Stats stats;
 
-        private List<Spell> spells;
+        
 
         private bool side;
 
@@ -22,10 +25,9 @@ namespace Game.Units
                 return id;
             }
         }
-
         public string Name;
 
-
+        //Preparing hero
         public Hero(int id, string name, int health, int damage,  int def, int AS, int[] s, double[] i)
         {
             this.id = id;
@@ -44,44 +46,21 @@ namespace Game.Units
             this.side = side;
         }
 
-        public int GetSide()
-        {
-            return side ? 1 : 0;
-        }
+        public Stopwatch timer;
 
-        public void UpdateStatus(Team[] teams,long currentTime)
+        public ConsoleOutput co;
+
+        //battle
+        public void UpdateStatus(Team[] teams)
         {
-            if (stats.AttackReady(currentTime))
+            if (stats.AttackReady())
             {
-                AutoAttack(teams, currentTime);
+                AutoAttack(teams);
             }
-            stats.Update(currentTime);
+            stats.Update();
         }
 
-        public void AutoAttack(Team[] teams, long currentTime)
-        {
-            Hero target;
-            if (!stats.isDead)
-            {
-                target = SelectTarget(teams);
-                int realDamage = (stats.Damage - target.stats.Def);
-                realDamage = realDamage >= 1 ? realDamage : 1;
-                ConsoleOutput.Add(currentTime,(string.Format("Hero {0} deals {1} {3} to Hero {2}", Name, realDamage > 0 ? realDamage : -realDamage, target.Name, realDamage > 0 ? "damage" : "heal")));
-                target.Damage(realDamage, DamageType.Physical);
-                stats.AddSP(0.2);
-            }
-            stats.Attack(currentTime);
-        }
-
-        public void UseSpell(Team[] teams, long currentTime)
-        {
-            if (spells.Count != 0)
-            {
-                ConsoleOutput.Add(currentTime, string.Format("Hero {0} using Spell", Name));
-                spells[0].Action(teams, this);
-            }
-        }
-
+        //autoattack
         public Hero SelectTarget(Team[] teams)
         {
             int n = 0;
@@ -93,6 +72,33 @@ namespace Game.Units
             return teams[side ? 0 : 1][n];
         }
 
+        public void AutoAttack(Team[] teams)
+        {
+            Hero target;
+            if (!stats.isDead)
+            {
+                target = SelectTarget(teams);
+                int realDamage = (stats.Damage - target.stats.Def);
+                realDamage = realDamage >= 1 ? realDamage : 1;
+                co.Add(timer.ElapsedMilliseconds, (string.Format("Hero {0} deals {1} {3} to Hero {2}", Name, realDamage > 0 ? realDamage : -realDamage, target.Name, realDamage > 0 ? "damage" : "heal")));
+                target.Damage(realDamage, DamageType.Physical);
+                stats.AddSP(0.2);
+            }
+            stats.Attack();
+        }
+
+        //spells
+        private List<Spell> spells;
+        public void UseSpell(Team[] teams, long currentTime)
+        {
+            if (spells.Count != 0)
+            {
+
+                spells[0].Action(teams, this);
+            }
+        }
+
+        //get damage;
         public int Damage(int damage, int type)
         {
             switch (type)
@@ -124,8 +130,12 @@ namespace Game.Units
                         return damage;
                     } 
             }
-            
+        }
 
+        //getters
+        public int GetSide()
+        {
+            return side ? 1 : 0;
         }
     }
 }

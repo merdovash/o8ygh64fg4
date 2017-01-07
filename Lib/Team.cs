@@ -1,6 +1,8 @@
-﻿using Game.Units;
+﻿using Game.Data.Form;
+using Game.Units;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Game
 {
@@ -16,6 +18,8 @@ namespace Game
             side = i;
         }
 
+        //prepare
+
         public void Prepare()
         {
             team.ForEach(x => x.stats.Prepare());
@@ -26,9 +30,19 @@ namespace Game
         public void AddHero(Hero hero)
         {
             hero.SetSide(side);
-            hero.stats.Attack((2 * team.Count + (side ? 1 : 0))*500-hero.stats.AttackSpeed);
+            hero.stats.LastAttack=(2 * team.Count + (side ? 1 : 0))*500-hero.stats.AttackSpeed;
             team.Add(hero);
             
+        }
+
+        public void SetTimer(Stopwatch timer)
+        {
+            team.ForEach(x => x.timer = timer);
+        }
+
+        public void SetCout(ConsoleOutput cout)
+        {
+            team.ForEach(x => x.co = cout);
         }
 
         //alive heroes

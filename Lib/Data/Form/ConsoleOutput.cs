@@ -10,12 +10,18 @@ namespace Game.Data.Form
 
     class ConsoleOutput
     {
-        private static Dictionary<long, string> log = new Dictionary<long,string>();
-        private static string[] battle = new string[5];
+        private Dictionary<long, string> log;
+        private string[] battle;
+        private bool[] changes;
 
-        private static bool[] changes = new bool[] { false, false };
+        public ConsoleOutput()
+        {
+            log = new Dictionary<long, string>();
+            battle = new string[5];
+            changes = new bool[] { false, false };
+        }
 
-        public static void Add(long currentTime, string text)
+        public void Add(long currentTime, string text)
         {
             log.Add(currentTime, text);
             for (int i = 0; i < log.Count; i++)
@@ -33,11 +39,11 @@ namespace Game.Data.Form
             changes[0] = true;
         }
 
-        public static void Update(string[] battle)
+        public void Update(string[] battle)
         {
-            if (ConsoleOutput.battle != battle)
+            if (this.battle != battle)
             {
-                ConsoleOutput.battle = battle;
+                this.battle = battle;
                 changes[1] = true;
             }
         }
@@ -53,9 +59,12 @@ namespace Game.Data.Form
                 {
                     Console.WriteLine(battle[i]);
                 }
-                for (int i = log.Values.Count - 1; i >= 0; i--)
+                if (log.Count > 0)
                 {
-                    Console.WriteLine(log.Values.ElementAt(i));
+                    for (int i = log.Values.Count - 1; i >= 0; i--)
+                    {
+                        Console.WriteLine(log.Values.ElementAt(i));
+                    }
                 }
                 changes[0] = false;
                 changes[1] = false;

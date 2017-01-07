@@ -111,7 +111,7 @@ namespace Game.Data
 
                     r.Read();
 
-                    Hero hero = Reader.GetHero((int)r["HeroId"]);
+                    Hero hero = GetHero((int)r["HeroId"]);
                     hero.stats.SetLevel(dungeonID, 0);
 
                     t.AddHero(hero);
